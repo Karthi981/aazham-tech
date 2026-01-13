@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Header from "./Header";
 import {
     BookOpen,
@@ -29,11 +29,24 @@ import FeatureCard from "./FeatureCard";
 
 const CoursecraftLMS = () => {
     const [isProductsOpen, setIsProductsOpen] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const handleHomePageSectionClick = (sectionId: string) => {
+        if (isHomePage) {
+            // If already on home page, scroll to section
+            scrollToSection(sectionId);
+        } else {
+            // If on another page, navigate to home with hash
+            navigate(`/#${sectionId}`);
         }
     };
 
@@ -510,8 +523,8 @@ const bottomFeatures = features.slice(2, 5);
                         <div>
                             <h4 className="font-semibold mb-4 text-gray-800">Product</h4>
                             <ul className="space-y-2 text-gray-600 text-sm">
-                                <li className="hover:text-blue-600 cursor-pointer transition-colors">Features</li>
-                                <li className="hover:text-blue-600 cursor-pointer transition-colors">Pricing</li>
+                                <li onClick={() => scrollToSection('features')} className="hover:text-blue-600 cursor-pointer transition-colors">Features</li>
+                                <li onClick={() => scrollToSection('pricing')} className="hover:text-blue-600 cursor-pointer transition-colors">Pricing</li>
                                 <li className="hover:text-blue-600 cursor-pointer transition-colors">Integrations</li>
                                 <li className="hover:text-blue-600 cursor-pointer transition-colors">Updates</li>
                             </ul>
@@ -530,9 +543,9 @@ const bottomFeatures = features.slice(2, 5);
                         <div>
                             <h4 className="font-semibold mb-4 text-gray-800">Company</h4>
                             <ul className="space-y-2 text-gray-600 text-sm">
-                                <li className="hover:text-blue-600 cursor-pointer transition-colors">About</li>
+                                <li onClick={() => handleHomePageSectionClick('about')} className="hover:text-blue-600 cursor-pointer transition-colors">About</li>
                                 <li className="hover:text-blue-600 cursor-pointer transition-colors">Careers</li>
-                                <li className="hover:text-blue-600 cursor-pointer transition-colors">Contact</li>
+                                <li onClick={() => handleHomePageSectionClick('contact')} className="hover:text-blue-600 cursor-pointer transition-colors">Contact</li>
                                 <li className="hover:text-blue-600 cursor-pointer transition-colors">Privacy Policy</li>
                             </ul>
                         </div>

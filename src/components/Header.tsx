@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from './ui/button';
 import { BookOpen, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
     scrollToSection?: (id: string) => void;
@@ -11,11 +11,25 @@ interface HeaderProps {
 }
 
 const Header = ({ scrollToSection, setIsProductsOpen, isProductsOpen, variant = 'landing' }: HeaderProps) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+
     const handleLogoClick = () => {
         if (variant === 'product') {
             window.location.href = '/';
         } else {
             window.scrollTo(0, 0);
+        }
+    };
+
+    const handleSectionClick = (sectionId: string) => {
+        if (isHomePage) {
+            // If already on home page, just scroll
+            scrollToSection?.(sectionId);
+        } else {
+            // If on another page, navigate to home with hash
+            navigate(`/#${sectionId}`);
         }
     };
 
@@ -80,9 +94,9 @@ const Header = ({ scrollToSection, setIsProductsOpen, isProductsOpen, variant = 
                                 </div>
                             </div>
 
-                            <Button variant="ghost" onClick={() => scrollToSection?.('services')}>Services</Button>
-                            <Button variant="ghost" onClick={() => scrollToSection?.('about')}>About</Button>
-                            <Button variant="ghost" onClick={() => scrollToSection?.('contact')}>Contact</Button>
+                            <Button variant="ghost" onClick={() => handleSectionClick('services')}>Services</Button>
+                            <Button variant="ghost" onClick={() => handleSectionClick('about')}>About</Button>
+                            <Button variant="ghost" onClick={() => handleSectionClick('contact')}>Contact</Button>
                         </>
                     ) : (
                         <>

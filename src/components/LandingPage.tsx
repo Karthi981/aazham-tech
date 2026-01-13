@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useLocation } from "react-router-dom"
 import ServicesSection from "./ServicesSection"
 import AboutSection from "./AboutSection"
 import TechStackSection from "./TechStackSection"
@@ -10,13 +11,27 @@ import Header from "./Header"
 
 const LandingPage = () => {
     const [isProductsOpen, setIsProductsOpen] = useState(false);
+    const location = useLocation();
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
+        
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
     }
+
+    // Handle hash navigation when component mounts or location changes
+    useEffect(() => {
+        const hash = location.hash.replace('#', '');
+        if (hash) {
+            // Delay to ensure DOM is ready, especially when navigating from another page
+            const timer = setTimeout(() => {
+                scrollToSection(hash);
+            }, 200);
+            return () => clearTimeout(timer);
+        }
+    }, [location.hash, location.pathname]);
 
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">

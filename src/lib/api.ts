@@ -1,11 +1,17 @@
 // API configuration
 const getApiUrl = () => {
-  // In production, use relative URLs (Vercel will handle routing)
+  // Use environment variable if set (for separate domain deployment)
+  // Otherwise, use relative URLs for same-domain deployment
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  
+  // In production, use relative URLs (same domain)
   // In development, use localhost
   if (process.env.NODE_ENV === 'production') {
-    return process.env.REACT_APP_API_URL || '/api';
+    return '/api';
   }
-  return process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  return 'http://localhost:5000/api';
 };
 
 export const API_BASE_URL = getApiUrl();

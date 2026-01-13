@@ -1,7 +1,26 @@
 import { Facebook, Twitter, Linkedin, Instagram, Github, MapPin, Phone, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 
 const FooterSection = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
+
+    const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+        e.preventDefault();
+        if (isHomePage) {
+            // If already on home page, scroll to section
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else {
+            // If on another page, navigate to home with hash
+            navigate(`/#${sectionId}`);
+        }
+    };
+
     return (
         <footer className="bg-muted text-muted-foreground py-12 border-t border-border">
             <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-8">
@@ -32,11 +51,11 @@ const FooterSection = () => {
                 <div>
                     <h4 className="font-bold text-foreground mb-4">Company</h4>
                     <ul className="space-y-2 text-sm">
-                        <li><a href="#about" className="hover:text-teal-600 transition-colors">About Us</a></li>
-                        <li><a href="#services" className="hover:text-teal-600 transition-colors">Services</a></li>
+                        <li><a href="/#about" onClick={(e) => handleSectionClick(e, 'about')} className="hover:text-teal-600 transition-colors cursor-pointer">About Us</a></li>
+                        <li><a href="/#services" onClick={(e) => handleSectionClick(e, 'services')} className="hover:text-teal-600 transition-colors cursor-pointer">Services</a></li>
                         <li><a href="#" className="hover:text-teal-600 transition-colors">Careers</a></li>
                         <li><a href="#" className="hover:text-teal-600 transition-colors">Blog</a></li>
-                        <li><a href="#contact" className="hover:text-teal-600 transition-colors">Contact</a></li>
+                        <li><a href="/#contact" onClick={(e) => handleSectionClick(e, 'contact')} className="hover:text-teal-600 transition-colors cursor-pointer">Contact</a></li>
                     </ul>
                 </div>
 
